@@ -11,6 +11,10 @@ class AModularExperimentGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 
+private:
+	UPROPERTY()
+	TArray<UAnchor*> SpawnedAnchors;
+
 public:
 	AModularExperimentGameMode();
 

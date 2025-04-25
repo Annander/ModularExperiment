@@ -26,6 +26,11 @@ void AModularExperimentGameMode::BeginPlay()
         auto NewChunk = World->SpawnActor<AChunk>(ChunkClasses[RandomIndex]);
         TArray<UAnchor*> Anchors = NewChunk->GetAnchors();
 
+        for (const auto Anchor : Anchors)
+        {
+            SpawnedAnchors.Add(Anchor);
+        }
+
         for (int32 i = 1; i < SpawnCount; i++)
         {
             if (Anchors.Num() > 0)
@@ -43,6 +48,11 @@ void AModularExperimentGameMode::BeginPlay()
                     // Find an anchor in the new chunk to match the selected anchor
                     if (const TArray<UAnchor*> NewChunkAnchors = NewChunk->GetAnchors(); NewChunkAnchors.Num() > 0)
                     {
+                        for (const auto Anchor : NewChunkAnchors)
+                        {
+                            SpawnedAnchors.Add(Anchor);
+                        }
+                        
                         const auto SecondAnchorIndex = FMath::RandRange(0, NewChunkAnchors.Num() - 1);
                         const UAnchor* NewChunkAnchor = NewChunkAnchors[SecondAnchorIndex];
 
@@ -75,6 +85,19 @@ void AModularExperimentGameMode::BeginPlay()
             {
                 // No more anchors to use
                 break;
+            }
+        }
+
+        for (const auto ChunkA : SpawnedAnchors)
+        {
+            for (const auto ChunkB : SpawnedAnchors)
+            {
+                if (ChunkA == ChunkB) continue;
+
+                const auto Distance = FVector::Distance(ChunkA->GetComponentLocation(), ChunkB->GetComponentLocation());
+
+                if (Distance < 100.0f)
+                {}
             }
         }
     }
